@@ -39,7 +39,7 @@ public class ClienteBD {
         
         try {
             Connection con = Conexao.getConnection();
-            String sql = "Select id, codigo, nome, cpf, dataNascimento from cliente where nome = ?";
+            String sql = "Select id, nome, cpf, dataNasci, filial from cliente where nome = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
             stmt.setString(0, nome);
             try (ResultSet rset = stmt.executeQuery()) {
@@ -58,5 +58,22 @@ public class ClienteBD {
         }
         
         return cli;
+    }
+    
+    public void novoCliente(Cliente cliente, Boolean fechar) {
+        try {
+            Connection con = Conexao.getConnection();
+            String sql = "insert into cliente (nome, cpf, dataNasci, filial) values (?, ?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(0, cliente.getNome());
+            stmt.setString(1, cliente.getCpf());
+            stmt.setDate(2, new java.sql.Date(cliente.getDataNascimento().getTime()));
+            stmt.setString(3, cliente.getFilial().getCodigo());
+            stmt.executeQuery();
+        } catch (SQLException ex) {
+            System.out.println("Deu ruim...");
+        } finally {
+            if (fechar) Conexao.FecharConexao();
+        }
     }
 }

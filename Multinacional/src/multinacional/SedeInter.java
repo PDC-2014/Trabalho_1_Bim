@@ -6,7 +6,7 @@ import java.util.List;
 import model.Cliente;
 
 public interface SedeInter extends Remote{
-    void criarCliente() throws RemoteException;
+    void criarCliente(Cliente cliente) throws RemoteException;
     List<Cliente> buscarClienteNome(String nome) throws RemoteException;
     Cliente buscarCliente(Integer id, String identificadorSede) throws RemoteException;
 }

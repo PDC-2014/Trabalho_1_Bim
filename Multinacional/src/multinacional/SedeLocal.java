@@ -17,8 +17,8 @@ public class SedeLocal extends UnicastRemoteObject implements SedeInter {
     }
 
     @Override
-    public void criarCliente() {
-        
+    public void criarCliente(Cliente cliente) {
+        new ClienteBD().novoCliente(cliente, Boolean.TRUE);
     }
 
     @Override
