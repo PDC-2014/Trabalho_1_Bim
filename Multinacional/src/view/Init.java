@@ -1,12 +1,10 @@
 package view;
 
 import dao.Conexao;
-import de.javasoft.plaf.synthetica.SyntheticaAluOxideLookAndFeel;
 import java.rmi.Naming;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import model.Filial;
 import multinacional.MultiNacionalInter;
 import util.Util;
@@ -17,7 +15,6 @@ public class Init extends javax.swing.JFrame {
     public Init() {
         initComponents();
         setLocationRelativeTo(null);
-        setTitle("Multinacional Ltda.");
 
         listarFilais();
     }
@@ -46,6 +43,7 @@ public class Init extends javax.swing.JFrame {
         btnEntrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Multinacional !Ltda.");
 
         jPanel1.setToolTipText("");
         jPanel1.setName(""); // NOI18N
@@ -124,11 +122,27 @@ public class Init extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEntrarActionPerformed
 
     public static void main(String args[]) {
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
         try {
-            UIManager.setLookAndFeel(new SyntheticaAluOxideLookAndFeel());
-        } catch (Exception e) {
-            e.printStackTrace();
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Principal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
