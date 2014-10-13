@@ -11,15 +11,8 @@ public class MultinacionalServidorCentral extends UnicastRemoteObject implements
         super();
     } 
    
-   private FilialBD filialBD = new FilialBD();
-
     @Override
     public List<Filial> listarFiliais() throws RemoteException {
-        return filialBD.listarFiliais(Boolean.TRUE);
-    }
-
-    @Override
-    public Filial conectarFilial() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new FilialBD().listarFiliais(Boolean.TRUE);
     }
 }

@@ -7,5 +7,4 @@ import model.Filial;
 
 public interface MultiNacionalInter extends Remote{
     List<Filial> listarFiliais() throws RemoteException;
-    Filial conectarFilial() throws RemoteException;
 }
