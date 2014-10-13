@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import model.Filial;
 
-public class Conexao {
+public abstract class Conexao {
 
 	public static Filial filial;
 	private static Connection connection;
@@ -57,4 +57,5 @@ public class Conexao {
 			return false;
 		}
 	}
+	
 }

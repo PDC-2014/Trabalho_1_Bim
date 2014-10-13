@@ -3,7 +3,7 @@ USE japao;
 CREATE TABLE Produto (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     nome VARCHAR(55) NOT NULL,
-    quantide_disponivel INTEGER NOT NULL DEFAULT 0,
+    quantidade_disponivel INTEGER NOT NULL DEFAULT 0,
     peso DOUBLE NOT NULL DEFAULT 0,
     preco_unitario DOUBLE NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
@@ -47,7 +47,7 @@ CREATE TABLE Filial (
 CREATE TABLE Produto (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     nome VARCHAR(55) NOT NULL,
-    quantide_disponivel INTEGER NOT NULL DEFAULT 0,
+    quantidade_disponivel INTEGER NOT NULL DEFAULT 0,
     peso DOUBLE NOT NULL DEFAULT 0,
     preco_unitario DOUBLE NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
@@ -84,7 +84,7 @@ USE italia;
 CREATE TABLE Produto (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     nome VARCHAR(55) NOT NULL,
-    quantide_disponivel INTEGER NOT NULL DEFAULT 0,
+    quantidade_disponivel INTEGER NOT NULL DEFAULT 0,
     peso DOUBLE NOT NULL DEFAULT 0,
     preco_unitario DOUBLE NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
@@ -121,7 +121,7 @@ USE canada;
 CREATE TABLE Produto (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     nome VARCHAR(55) NOT NULL,
-    quantide_disponivel INTEGER NOT NULL DEFAULT 0,
+    quantidade_disponivel INTEGER NOT NULL DEFAULT 0,
     peso DOUBLE NOT NULL DEFAULT 0,
     preco_unitario DOUBLE NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
