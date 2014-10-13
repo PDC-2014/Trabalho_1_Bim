@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("serial")
 public class Compra implements Serializable{
     private Integer id;
     private Cliente cliente;

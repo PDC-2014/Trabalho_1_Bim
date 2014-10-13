@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.Objects;
 
+@SuppressWarnings("serial")
 public class ItemCompra implements Serializable{
     private Compra compra;
     private Produto produto;

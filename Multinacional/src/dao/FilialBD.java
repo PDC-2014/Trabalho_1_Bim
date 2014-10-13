@@ -1,6 +1,5 @@
 package dao;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,63 +8,75 @@ import java.util.List;
 
 import model.Filial;
 
+import static dao.Conexao.*;
+
 public class FilialBD {
-	
-    public List<Filial> listarFiliais(Boolean fechar) {
-    	
-		List<Filial> filiais = new ArrayList<>();
+
+	public static List<Filial> listarFiliais() {
+		return listarFiliais(true);
+	}
+
+	public static List<Filial> listarFiliais(Boolean fechar) {
+
+		List<Filial> filiais = new ArrayList<Filial>();
+		Filial filial = null;
+		String sql = null;
 
 		try {
 
-			String sql = "SELECT cod, nome, porta FROM filial";
+			sql = "SELECT cod, nome, porta FROM filial";
 
-			Connection con = Conexao.getConnectionServidor();
-			PreparedStatement stmt = con.prepareStatement(sql);
-			
-			try (ResultSet rset = stmt.executeQuery()) {
-				while (rset.next()) {
-					Filial f = new Filial();
-					f.setCodigo(rset.getString("cod"));
-					f.setNome(rset.getString("nome"));
-					f.setPorta(rset.getInt("porta"));
-					filiais.add(f);
-				}
+			PreparedStatement stmt = getConnectionServidor().prepareStatement(sql);
+
+			ResultSet rset = stmt.executeQuery();
+			while (rset.next()) {
+				filial = new Filial();
+				filial.setCodigo(rset.getString("cod"));
+				filial.setNome(rset.getString("nome"));
+				filial.setPorta(rset.getInt("porta"));
+				filiais.add(filial);
 			}
-		} catch (SQLException ex) {
-			ex.printStackTrace();
+
+		} catch (SQLException exception) {
+			exception.printStackTrace();
 		} finally {
 			if (fechar)
-				Conexao.FecharConexao();
+				fecharConexao();
 		}
 		return filiais;
-    }
-
-	public Filial recuperarFilial(String codigo, Boolean fechar) {
-		
-		Filial filial = null;
-        
-        try {
-        	
-        	String sql = "SELECT cod, nome, porta FROM filial WHERE cod = ?";
-        	
-            Connection con = Conexao.getConnectionServidor();
-            PreparedStatement stmt = con.prepareStatement(sql);
-            
-            stmt.setString(0, codigo);
-            
-            try (ResultSet rset = stmt.executeQuery()) {
-                while (rset.next()) {
-                    Filial f = new Filial();
-                    f.setCodigo(rset.getString("cod"));
-					f.setNome(rset.getString("nome"));
-					f.setPorta(rset.getInt("porta"));
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            if (fechar) Conexao.FecharConexao();
-        }
-        return filial;
 	}
+
+	public static Filial recuperarFilial(String codigo) {
+		return recuperarFilial(codigo, true);
+	}
+
+	public static Filial recuperarFilial(String codigo, Boolean fechar) {
+
+		Filial filial = null;
+		String sql = null;
+
+		try {
+			sql = "SELECT cod, nome, porta FROM filial WHERE cod = ?";
+
+			PreparedStatement stmt = getConnectionServidor().prepareStatement(sql);
+			stmt.setString(1, codigo);
+
+			ResultSet rset = stmt.executeQuery();
+			if (rset.next()) {
+				filial = new Filial();
+				filial.setCodigo(rset.getString("cod"));
+				filial.setNome(rset.getString("nome"));
+				filial.setPorta(rset.getInt("porta"));
+			}
+
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+		} finally {
+			if (fechar)
+				fecharConexao();
+		}
+
+		return filial;
+	}
+
 }
