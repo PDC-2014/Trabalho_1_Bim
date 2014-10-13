@@ -55,10 +55,15 @@ public class SedeLocal extends UnicastRemoteObject implements SedeInter {
     public Cliente buscarCliente(Integer id, String identificadorSede) {
         Cliente cliente = null;
         
-        List<Filial> filiais = new FilialBD().listarFiliais(Boolean.TRUE);
-        for (Filial f : filiais) {
-            if (f.getCodigo().equals(identificadorSede))
-            cliente = new ClienteBD().getClienteByID(id, Boolean.TRUE);
+        List<Filial> filiais;
+        try {
+            filiais = new MultinacionalServidorCentral().listarFiliais();
+            for (Filial f : filiais) {
+                if (f.getCodigo().equals(identificadorSede))
+                    cliente = new ClienteBD().getClienteByID(id, Boolean.TRUE);
+            }
+        } catch (RemoteException ex) {
+            System.out.println("Falha no conexão remota com o servidor... Alexandrice");
         }
         
         return cliente;
