@@ -3,20 +3,13 @@ package model;
 import java.io.Serializable;
 
 public class Filial implements Serializable{
-    private Integer id;
+	
     private String nome;
     private String codigo;
+    private int porta;
     
     public Filial() {
         super();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
     
     public String getNome() {
@@ -34,8 +27,16 @@ public class Filial implements Serializable{
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
+    
+    public int getPorta() {
+		return porta;
+	}
 
-    @Override
+	public void setPorta(int porta) {
+		this.porta = porta;
+	}
+
+	@Override
     public String toString() {
         return nome;
     }
