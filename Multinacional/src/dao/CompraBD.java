@@ -8,6 +8,7 @@ import java.util.List;
 import model.Cliente;
 import model.Compra;
 import model.Filial;
+import model.ItemCompra;
 
 public class CompraBD {
 
@@ -81,6 +82,15 @@ public class CompraBD {
             stmt.setInt(0, compra.getCliente().getId());
             stmt.setDate(1, new java.sql.Date(compra.getData().getTime()));
             stmt.executeQuery();
+            
+            for (ItemCompra ic : compra.getItens()) {
+                sql = "insert into item_compra (compra, produto, quantidade) values (?, ?, ?)";
+                stmt = con.prepareStatement(sql);
+                stmt.setInt(0, compra.getId());
+                stmt.setInt(1, ic.getProduto().getId());
+                stmt.setInt(2, ic.getQuantidade());
+                stmt.executeQuery();
+            }
         } catch (SQLException ex) {
             System.out.println("Deu ruim...");
         } finally {
