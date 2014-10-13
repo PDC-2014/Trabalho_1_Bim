@@ -18,7 +18,7 @@ public class SedeLocal extends UnicastRemoteObject implements SedeInter {
 
     @Override
     public void criarCliente() {
-
+        
     }
 
     @Override
@@ -38,12 +38,12 @@ public class SedeLocal extends UnicastRemoteObject implements SedeInter {
     }
 
     @Override
-    public Cliente buscarCliente(Integer id, Integer identificadorSede) {
+    public Cliente buscarCliente(Integer id, String identificadorSede) {
         Cliente cliente = null;
         
         List<Filial> filiais = new FilialBD().listarFiliais(true);
         for (Filial f : filiais) {
-            if (f.getId().equals(identificadorSede))
+            if (f.getCodigo().equals(identificadorSede))
             cliente = new ClienteBD().getClienteByID(id, true);
         }
         

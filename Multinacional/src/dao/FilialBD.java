@@ -18,7 +18,7 @@ public class FilialBD {
             try (ResultSet rset = stmt.executeQuery()) {
                 while (rset.next()) {
                     Filial f = new Filial();
-                    f.setId(rset.getInt("id"));
+                    f.setCodigo(rset.getString("codigo"));
                     f.setNome(rset.getString("nome"));
                     f.setCodigo(rset.getString("codigo"));
                     filiais.add(f);

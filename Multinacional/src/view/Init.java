@@ -111,7 +111,7 @@ public class Init extends javax.swing.JFrame {
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
         Filial filial = (Filial) listaFiliais.getSelectedValue();
-        if (filial == null || filial.getId() == null)
+        if (filial == null || filial.getCodigo() == null)
             JOptionPane.showMessageDialog(rootPane, "Nenhuma filial foi selecionada.");
         else {
             Conexao.filial = filial;
