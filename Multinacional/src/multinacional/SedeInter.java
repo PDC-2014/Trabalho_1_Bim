@@ -10,7 +10,7 @@ import model.Produto;
 public interface SedeInter extends Remote{
     void criarCliente(Cliente cliente) throws RemoteException;
     List<Cliente> buscarClienteNome(String nome) throws RemoteException;
-    Cliente buscarCliente(Integer id, String identificadorSede) throws RemoteException;
+    Cliente buscarClienteID(Integer id, String identificadorSede) throws RemoteException;
     void cadastrarProduto(Produto produto) throws RemoteException;
     List<Produto> listarProdutos() throws RemoteException;
     void novaCompra(Compra compra) throws RemoteException;

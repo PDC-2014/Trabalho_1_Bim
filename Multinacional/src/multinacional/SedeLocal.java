@@ -49,7 +49,7 @@ public class SedeLocal extends UnicastRemoteObject implements SedeInter {
     }
 
     @Override
-    public Cliente buscarCliente(Integer id, String identificadorSede) {
+    public Cliente buscarClienteID(Integer id, String identificadorSede) {
         Cliente cliente = null;
         
         List<Filial> filiais;
