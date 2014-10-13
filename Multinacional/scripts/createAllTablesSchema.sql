@@ -1,38 +1,28 @@
 USE japao;
 
-CREATE TABLE Filial (
-	cod VARCHAR(55) NOT NULL,
-    nome VARCHAR(55) NOT NULL,
-    PRIMARY KEY(cod)
-);
-
 CREATE TABLE Produto (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     nome VARCHAR(55) NOT NULL,
     quantide_disponivel INTEGER NOT NULL DEFAULT 0,
     peso DOUBLE NOT NULL DEFAULT 0,
     preco_unitario DOUBLE NOT NULL DEFAULT 0,
-    filial_cod VARCHAR(55) NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(filial_cod) REFERENCES Filial(Cod)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE Cliente (
-	id INTEGER NOT NULL AUTO_INCREMENT,
+	cod VARCHAR(15) NOT NULL,
     nome VARCHAR(55) NOT NULL,
 	cpf VARCHAR(55) NOT NULL,
     data_nascimento DATE NOT NULL,
-    filial_cod VARCHAR(55) NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(filial_cod) REFERENCES Filial(Cod)
+    PRIMARY KEY(cod)
 );
 
 CREATE TABLE Compra (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     data_compra DATE NOT NULL,
-    cliente_id INTEGER NOT NULL,
+    cliente_cod VARCHAR(15) NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(cliente_id) REFERENCES Cliente(id)
+    FOREIGN KEY(cliente_cod) REFERENCES Cliente(cod)
 );
 
 CREATE TABLE ItemCompra (
@@ -44,11 +34,13 @@ CREATE TABLE ItemCompra (
     FOREIGN KEY(produto_id) REFERENCES Produto(id)
 );
 
+###############################################################################
 USE brasil;
 
 CREATE TABLE Filial (
 	cod VARCHAR(55) NOT NULL,
     nome VARCHAR(55) NOT NULL,
+    porta INTEGER NOT NULL,
     PRIMARY KEY(cod)
 );
 
@@ -58,27 +50,23 @@ CREATE TABLE Produto (
     quantide_disponivel INTEGER NOT NULL DEFAULT 0,
     peso DOUBLE NOT NULL DEFAULT 0,
     preco_unitario DOUBLE NOT NULL DEFAULT 0,
-    filial_cod VARCHAR(55) NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(filial_cod) REFERENCES Filial(Cod)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE Cliente (
-	id INTEGER NOT NULL AUTO_INCREMENT,
+	cod VARCHAR(15) NOT NULL,
     nome VARCHAR(55) NOT NULL,
 	cpf VARCHAR(55) NOT NULL,
     data_nascimento DATE NOT NULL,
-    filial_cod VARCHAR(55) NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(filial_cod) REFERENCES Filial(Cod)
+    PRIMARY KEY(cod)
 );
 
 CREATE TABLE Compra (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     data_compra DATE NOT NULL,
-    cliente_id INTEGER NOT NULL,
+    cliente_cod VARCHAR(15) NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(cliente_id) REFERENCES Cliente(id)
+    FOREIGN KEY(cliente_cod) REFERENCES Cliente(cod)
 );
 
 CREATE TABLE ItemCompra (
@@ -90,41 +78,32 @@ CREATE TABLE ItemCompra (
     FOREIGN KEY(produto_id) REFERENCES Produto(id)
 );
 
+###############################################################################
 USE italia;
 
-CREATE TABLE Filial (
-	cod VARCHAR(55) NOT NULL,
-    nome VARCHAR(55) NOT NULL,
-    PRIMARY KEY(cod)
-);
-
 CREATE TABLE Produto (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     nome VARCHAR(55) NOT NULL,
     quantide_disponivel INTEGER NOT NULL DEFAULT 0,
     peso DOUBLE NOT NULL DEFAULT 0,
     preco_unitario DOUBLE NOT NULL DEFAULT 0,
-    filial_cod VARCHAR(55) NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(filial_cod) REFERENCES Filial(Cod)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE Cliente (
-	id INTEGER NOT NULL AUTO_INCREMENT,
+	cod VARCHAR(15) NOT NULL,
     nome VARCHAR(55) NOT NULL,
 	cpf VARCHAR(55) NOT NULL,
     data_nascimento DATE NOT NULL,
-    filial_cod VARCHAR(55) NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(filial_cod) REFERENCES Filial(Cod)
+    PRIMARY KEY(cod)
 );
 
 CREATE TABLE Compra (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     data_compra DATE NOT NULL,
-    cliente_id INTEGER NOT NULL,
+    cliente_cod VARCHAR(15) NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(cliente_id) REFERENCES Cliente(id)
+    FOREIGN KEY(cliente_cod) REFERENCES Cliente(cod)
 );
 
 CREATE TABLE ItemCompra (
@@ -136,13 +115,8 @@ CREATE TABLE ItemCompra (
     FOREIGN KEY(produto_id) REFERENCES Produto(id)
 );
 
+###############################################################################
 USE canada;
-
-CREATE TABLE Filial (
-	cod VARCHAR(55) NOT NULL,
-    nome VARCHAR(55) NOT NULL,
-    PRIMARY KEY(cod)
-);
 
 CREATE TABLE Produto (
 	id INTEGER NOT NULL AUTO_INCREMENT,
@@ -150,27 +124,23 @@ CREATE TABLE Produto (
     quantide_disponivel INTEGER NOT NULL DEFAULT 0,
     peso DOUBLE NOT NULL DEFAULT 0,
     preco_unitario DOUBLE NOT NULL DEFAULT 0,
-    filial_cod VARCHAR(55) NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(filial_cod) REFERENCES Filial(Cod)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE Cliente (
-	id INTEGER NOT NULL AUTO_INCREMENT,
+	cod VARCHAR(15) NOT NULL,
     nome VARCHAR(55) NOT NULL,
 	cpf VARCHAR(55) NOT NULL,
     data_nascimento DATE NOT NULL,
-    filial_cod VARCHAR(55) NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(filial_cod) REFERENCES Filial(Cod)
+    PRIMARY KEY(cod)
 );
 
 CREATE TABLE Compra (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     data_compra DATE NOT NULL,
-    cliente_id INTEGER NOT NULL,
+    cliente_cod VARCHAR(15) NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(cliente_id) REFERENCES Cliente(id)
+    FOREIGN KEY(cliente_cod) REFERENCES Cliente(cod)
 );
 
 CREATE TABLE ItemCompra (

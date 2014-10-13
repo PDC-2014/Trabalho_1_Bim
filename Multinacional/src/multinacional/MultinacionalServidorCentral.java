@@ -1,25 +1,40 @@
 package multinacional;
 
 import dao.FilialBD;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
+
 import model.Filial;
 
-public class MultinacionalServidorCentral extends UnicastRemoteObject implements MultiNacionalInter{
-   public MultinacionalServidorCentral() throws RemoteException{
-        super();
-    } 
-   
-   private FilialBD filialBD = new FilialBD();
+public class MultinacionalServidorCentral extends UnicastRemoteObject implements MultiNacionalInter {
+	
+	private List<Filial> filiais = new ArrayList<Filial>();
+	
+	public MultinacionalServidorCentral() throws RemoteException {
+		super();
+	}
 
-    @Override
-    public List<Filial> listarFiliais() throws RemoteException {
-        return filialBD.listarFiliais(Boolean.TRUE);
-    }
+	private FilialBD filialBD = new FilialBD();
 
-    @Override
-    public Filial conectarFilial() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public List<Filial> listarFiliais() throws RemoteException {
+		filiais = filialBD.listarFiliais(Boolean.TRUE);
+		return filiais;
+	}
+
+	@Override
+	public Filial recuperarFilial(String codigo) throws RemoteException {
+		for (Filial filial : filiais) {
+			if(filial.getCodigo().equals(codigo))
+				return filial;
+		}
+		
+		return filialBD.recuperarFilial(codigo, Boolean.TRUE);
+	}
+
+	
+	
 }
