@@ -114,7 +114,7 @@ public class Init extends javax.swing.JFrame {
         if (filial == null || filial.getId() == null)
             JOptionPane.showMessageDialog(rootPane, "Nenhuma filial foi selecionada.");
         else {
-            Conexao.filial = Util.definirFilial(filial.getCodigo());
+            Conexao.filial = filial;
             setVisible(false);
             Principal p = new Principal();
             p.setVisible(true);

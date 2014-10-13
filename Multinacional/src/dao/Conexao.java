@@ -3,9 +3,10 @@ package dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import model.Filial;
 
 public class Conexao {
-    public static String filial;
+    public static Filial filial;
     private static Connection connection;
     private static final String driverName = "com.mysql.jdbc.Driver";
     private static final String url = "jdbc:mysql://localhost/";

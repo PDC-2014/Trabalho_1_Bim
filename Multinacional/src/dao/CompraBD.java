@@ -21,7 +21,7 @@ public class CompraBD {
                 while (rset.next()) {
                     Compra c = new Compra();
                     c.setId(rset.getInt("id"));
-                    c.setCliente(clienteBD.getClienteByCodigo(rset.getString("cliente_id"), false));
+                    c.setCliente(clienteBD.getClienteByID(rset.getInt("cliente_id"), false));
                     c.setData(rset.getDate("data"));
                     ItemCompraBD itemCompraBD = new ItemCompraBD();
                     c.setItens(itemCompraBD.listarItemCompra(c ,false));
@@ -50,7 +50,7 @@ public class CompraBD {
                 while (rset.next()) {
                     Compra c = new Compra();
                     c.setId(rset.getInt("id"));
-                    c.setCliente(clienteBD.getClienteByCodigo(rset.getString("cliente_id"), false));
+                    c.setCliente(clienteBD.getClienteByID(rset.getInt("cliente_id"), false));
                     c.setData(rset.getDate("data"));
                     ItemCompraBD itemCompraBD = new ItemCompraBD();
                     c.setItens(itemCompraBD.listarItemCompra(c ,false));

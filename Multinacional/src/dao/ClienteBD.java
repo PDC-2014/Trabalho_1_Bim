@@ -5,17 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.Cliente;
-import model.Filial;
 
 public class ClienteBD {
-    public Cliente getClienteByCodigo(String codigo, Boolean fechar) {
+    public Cliente getClienteByID(Integer id, Boolean fechar) {
         Cliente cli = null;
         
         try {
             Connection con = Conexao.getConnection();
-            String sql = "Select id, nome, cpf, dataNasci, filial from cliente where codigo = ?";
+            String sql = "Select id, nome, cpf, dataNasci, filial from cliente where id = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setString(0, codigo);
+            stmt.setInt(0, id);
             try (ResultSet rset = stmt.executeQuery()) {
                 while (rset.next()) {
                     cli = new Cliente();
