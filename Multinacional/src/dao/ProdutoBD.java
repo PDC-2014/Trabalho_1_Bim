@@ -88,4 +88,22 @@ public class ProdutoBD {
         
         return prod;
     }
+    
+    public void novoProduto(Produto produto, Boolean fechar) {
+        try {
+            Connection con = Conexao.getConnection();
+            String sql = "insert into produto (nome, quantidadeDisponivel, peso, precoUnitario, filial) values (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(0, produto.getNome());
+            stmt.setInt(1, produto.getQuantidadeDisp());
+            stmt.setDouble(2, produto.getPeso());
+            stmt.setDouble(3, produto.getPrecoUnitario());
+            stmt.setString(4, produto.getFilial().getCodigo());
+            stmt.executeQuery();
+        } catch (SQLException ex) {
+            System.out.println("Deu ruim...");
+        } finally {
+            if (fechar) Conexao.FecharConexao();
+        }
+    }
 }
