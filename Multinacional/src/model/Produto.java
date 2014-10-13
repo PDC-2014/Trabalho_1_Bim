@@ -3,9 +3,10 @@ package model;
 import java.io.Serializable;
 
 public class Produto implements Serializable{
+	
     private Integer id;
     private String nome;
-    private Integer quantidadeDisp;
+    private Integer quantidadeDisponivel;
     private Double peso;
     private Double precoUnitario;
     private Filial filial;
@@ -27,11 +28,11 @@ public class Produto implements Serializable{
     }
 
     public Integer getQuantidadeDisp() {
-        return quantidadeDisp;
+        return quantidadeDisponivel;
     }
 
     public void setQuantidadeDisp(Integer quantidadeDisp) {
-        this.quantidadeDisp = quantidadeDisp;
+        this.quantidadeDisponivel = quantidadeDisp;
     }
 
     public Double getPeso() {
