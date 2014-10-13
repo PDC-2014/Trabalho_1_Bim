@@ -3,7 +3,6 @@ package multinacional;
 import dao.ClienteBD;
 import dao.CompraBD;
 import dao.Conexao;
-import dao.FilialBD;
 import dao.ProdutoBD;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -28,27 +27,40 @@ public class SedeLocal extends UnicastRemoteObject implements SedeInter {
     @Override
     public List<Cliente> buscarClienteNome(String nome) {
         List<Cliente> clientes = new ArrayList<>();
-        clientes.add(new ClienteBD().getClienteByNome(nome, Boolean.TRUE));
+        ClienteBD clienteBD = new ClienteBD();
+        if (clienteBD.getClienteByNome(nome, Boolean.TRUE) != null)
+            clientes.add(clienteBD.getClienteByNome(nome, Boolean.TRUE));
         
-        List<Filial> filiais = new FilialBD().listarFiliais(Boolean.TRUE);
         Filial filial = Conexao.filial;
-        filiais.remove(filial);
-        for (Filial f : filiais) {
-            Conexao.filial = f;
-            clientes.add(new ClienteBD().getClienteByNome(nome, Boolean.TRUE));
+        List<Filial> filiais = new ArrayList<>();
+        try {
+            filiais = new MultinacionalServidorCentral().listarFiliais();
+            filiais.remove(filial);
+            for (Filial f : filiais) {
+                Conexao.filial = f;
+                if (clienteBD.getClienteByNome(nome, Boolean.TRUE) != null)
+                    clientes.add(clienteBD.getClienteByNome(nome, Boolean.TRUE));
+            }
+        } catch (RemoteException ex) {
+            System.out.println("Falha no conexão remota com o servidor... Alexandrice");
         }
         Conexao.filial = filial;
         return clientes;
     }
 
     @Override
-    public Cliente buscarCliente(Integer id, String identificadorSede) {
+    public Cliente buscarClienteID(Integer id, String identificadorSede) {
         Cliente cliente = null;
         
-        List<Filial> filiais = new FilialBD().listarFiliais(Boolean.TRUE);
-        for (Filial f : filiais) {
-            if (f.getCodigo().equals(identificadorSede))
-            cliente = new ClienteBD().getClienteByID(id, Boolean.TRUE);
+        List<Filial> filiais;
+        try {
+            filiais = new MultinacionalServidorCentral().listarFiliais();
+            for (Filial f : filiais) {
+                if (f.getCodigo().equals(identificadorSede))
+                    cliente = new ClienteBD().getClienteByID(id, Boolean.TRUE);
+            }
+        } catch (RemoteException ex) {
+            System.out.println("Falha no conexão remota com o servidor... Alexandrice");
         }
         
         return cliente;

@@ -21,7 +21,7 @@ public class MultinacionalServidorCentral extends UnicastRemoteObject implements
 
 	@Override
 	public List<Filial> listarFiliais() throws RemoteException {
-		filiais = filialBD.listarFiliais(Boolean.TRUE);
+		filiais.addAll(filialBD.listarFiliais(Boolean.TRUE));
 		return filiais;
 	}
 
