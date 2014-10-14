@@ -14,13 +14,13 @@ public abstract class Conexao {
 	private static final String username = "root";
 	private static final String password = "root";
 
-	public static Connection getConnection() throws SQLException {
+	public static Connection getConnection() {
 		try {
 			if (connection != null)
 				return connection;
 
 			Class.forName(driverName);
-			connection = DriverManager.getConnection(url + filial, username, password);
+			connection = DriverManager.getConnection(url + filial.getNome().toLowerCase(), username, password);
 			return connection;
 		} catch (ClassNotFoundException e) {
 			System.out.println("O driver expecificado nao foi encontrado.");
@@ -31,7 +31,7 @@ public abstract class Conexao {
 		}
 	}
 
-	public static Connection getConnectionServidor() throws SQLException {
+	public static Connection getConnectionServidor() {
 		try {
 			Class.forName(driverName);
 
@@ -48,13 +48,14 @@ public abstract class Conexao {
 		}
 	}
 
-	public static boolean fecharConexao() {
+	public static void fecharConexao() {
 		try {
-			connection.close();
-			return true;
-		} catch (SQLException exception) {
+			if(connection != null)
+				connection.close();
+		} catch (Exception exception) {
 			exception.printStackTrace();
-			return false;
+		} finally {
+			connection = null;
 		}
 	}
 	

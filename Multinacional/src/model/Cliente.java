@@ -6,21 +6,22 @@ import java.util.Date;
 @SuppressWarnings("serial")
 public class Cliente implements Serializable{
 	
-    private Integer id;
+    private String codigo;
     private String nome;
     private String cpf;
     private Date dataNascimento;
+    
     private Filial filial;
 
-    public Integer getId() {
-        return id;
-    }
+    public String getCodigo() {
+		return codigo;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
 
-    public String getNome() {
+	public String getNome() {
         return nome;
     }
 

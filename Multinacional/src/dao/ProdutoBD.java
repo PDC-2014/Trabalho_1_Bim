@@ -1,40 +1,47 @@
 package dao;
 
-import java.sql.Connection;
+import static dao.Conexao.fecharConexao;
+import static dao.Conexao.getConnection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.Produto;
 
-import static dao.Conexao.*;
-
 public class ProdutoBD {
+
+	private static PreparedStatement preparedStatement;
+	private static ResultSet resultSet;
+	private static Produto produto;
+	private static String sql;
+	
+	private static void initVars(){
+		preparedStatement = null;
+		resultSet = null;
+		produto = null;
+		sql = null;
+	}
+	
+	public static Produto getProdutoByNome(String nome) {
+		return getProdutoByNome(nome, true);
+	}
 
 	public static Produto getProdutoByNome(String nome, Boolean fechar) {
 
-		Produto produto = null;
-		String sql = null;
+		initVars();
 
 		try {
-			sql = "Select id, nome, quantidadeDisp, peso, precoUnitario from produto where nome = ?";
+			sql = "Select id, nome, quantidade_disponivel, peso, preco_unitario from produto where nome = ?";
 
-			PreparedStatement stmt = getConnection().prepareStatement(sql);
-			stmt.setString(0, nome);
+			preparedStatement = getConnection().prepareStatement(sql);
+			preparedStatement.setString(1, nome);
 
-			try (ResultSet rset = stmt.executeQuery()) {
-				if (rset.next()) {
-					produto = new Produto();
-					produto.setId(rset.getInt("id"));
-					produto.setNome(rset.getString("nome"));
-					produto.setQuantidadeDisp(rset.getInt("quantidadeDisp"));
-					produto.setPeso(rset.getDouble("peso"));
-					produto.setPrecoUnitario(rset.getDouble("precoUnitario"));
-				}
-			}
-		} catch (SQLException exception) {
+			resultSet = preparedStatement.executeQuery();
+			produto = construirProduto(resultSet);
+
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		} finally {
 			if (fechar)
@@ -44,27 +51,24 @@ public class ProdutoBD {
 		return produto;
 	}
 
+	public static Produto getProdutoByID(Integer id) {
+		return getProdutoByID(id, true);
+	}
+
 	public static Produto getProdutoByID(Integer id, Boolean fechar) {
 
-		Produto produto = null;
-		String sql = null;
+		initVars();
 
 		try {
-			sql = "Select id, nome, quantidadeDisp, peso, precoUnitario from produto where id = ?";
+			sql = "Select id, nome, quantidade_disponivel, peso, preco_unitario from produto where id = ?";
 
-			PreparedStatement stmt = getConnection().prepareStatement(sql);
-			stmt.setInt(0, id);
-			try (ResultSet rset = stmt.executeQuery()) {
-				if (rset.next()) {
-					produto = new Produto();
-					produto.setId(rset.getInt("id"));
-					produto.setNome(rset.getString("nome"));
-					produto.setQuantidadeDisp(rset.getInt("quantidadeDisp"));
-					produto.setPeso(rset.getDouble("peso"));
-					produto.setPrecoUnitario(rset.getDouble("precoUnitario"));
-				}
-			}
-		} catch (SQLException exception) {
+			preparedStatement = getConnection().prepareStatement(sql);
+			preparedStatement.setInt(1, id);
+
+			resultSet = preparedStatement.executeQuery();
+			produto = construirProduto(resultSet);
+
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		} finally {
 			if (fechar)
@@ -72,31 +76,25 @@ public class ProdutoBD {
 		}
 
 		return produto;
+	}
+
+	public static List<Produto> listarProdutos() {
+		return listarProdutos(true);
 	}
 
 	public static List<Produto> listarProdutos(Boolean fechar) {
 
 		List<Produto> produtos = new ArrayList<Produto>();
-		Produto produto = null;
-		String sql = null;
+		initVars();
 
 		try {
-			sql = "Select id, nome, quantidadeDisp, peso, precoUnitario from produto";
+			sql = "Select id, nome, quantidade_disponivel, peso, preco_unitario from produto";
 
-			Connection con = getConnection();
-			PreparedStatement stmt = con.prepareStatement(sql);
-			try (ResultSet rset = stmt.executeQuery()) {
-				while (rset.next()) {
-					produto = new Produto();
-					produto.setId(rset.getInt("id"));
-					produto.setNome(rset.getString("nome"));
-					produto.setQuantidadeDisp(rset.getInt("quantidadeDisp"));
-					produto.setPeso(rset.getDouble("peso"));
-					produto.setPrecoUnitario(rset.getDouble("precoUnitario"));
-					produtos.add(produto);
-				}
-			}
-		} catch (SQLException exception) {
+			preparedStatement = getConnection().prepareStatement(sql);
+			resultSet = preparedStatement.executeQuery();
+			produtos = construirListaProduto(resultSet);
+
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		} finally {
 			if (fechar)
@@ -106,29 +104,34 @@ public class ProdutoBD {
 		return produtos;
 	}
 
-	public static void novoProduto(Produto produto, Boolean fechar) {
+	private static List<Produto> construirListaProduto(ResultSet resultSet) throws Exception {
+		List<Produto> produtos = new ArrayList<Produto>();
 
-		String sql = null;
+		while (resultSet.next())
+			produtos.add(montaProduto(resultSet));
 
-		try {
-			sql = "insert into produto (nome, quantidadeDisponivel, peso, precoUnitario, filial) values (?, ?, ?, ?, ?)";
+		return produtos;
+	}
 
-			PreparedStatement stmt = getConnection().prepareStatement(sql);
+	private static Produto construirProduto(ResultSet resultSet) throws Exception {
+		Produto produto = null;
 
-			stmt.setString(0, produto.getNome());
-			stmt.setInt(1, produto.getQuantidadeDisp());
-			stmt.setDouble(2, produto.getPeso());
-			stmt.setDouble(3, produto.getPrecoUnitario());
-			stmt.setString(4, produto.getFilial().getCodigo());
+		if (resultSet.next())
+			produto = montaProduto(resultSet);
 
-			stmt.executeQuery();
+		return produto;
+	}
 
-		} catch (SQLException exception) {
-			exception.printStackTrace();
-		} finally {
-			if (fechar)
-				fecharConexao();
-		}
+	private static Produto montaProduto(ResultSet resultSet) throws Exception {
+		Produto produto = new Produto();
+
+		produto.setId(resultSet.getInt("id"));
+		produto.setNome(resultSet.getString("nome"));
+		produto.setQuantidadeDisp(resultSet.getInt("quantidade_disponivel"));
+		produto.setPeso(resultSet.getDouble("peso"));
+		produto.setPrecoUnitario(resultSet.getDouble("preco_unitario"));
+
+		return produto;
 	}
 
 }

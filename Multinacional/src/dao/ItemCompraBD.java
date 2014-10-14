@@ -13,25 +13,23 @@ import static dao.Conexao.*;
 
 public class ItemCompraBD {
 
-	public List<ItemCompra> listarItemCompra(Compra compra, Boolean fechar) {
+	public static List<ItemCompra> listarItemCompra(Compra compra, Boolean fechar) {
 
 		List<ItemCompra> comp = new ArrayList<ItemCompra>();
 		String sql = null;
 
 		try {
-
-			sql = "Select produto_id, quantidade from item_compra where compra_id = ?";
+			sql = "Select produto_id, quantidade from itemcompra where compra_id = ?";
 
 			PreparedStatement stmt = getConnection().prepareStatement(sql);
-			stmt.setInt(0, compra.getId());
+			stmt.setInt(1, compra.getId());
 
-			try (ResultSet rset = stmt.executeQuery()) {
+			ResultSet rset = stmt.executeQuery();
 				while (rset.next()) {
 					ItemCompra ic = new ItemCompra();
 					ic.setProduto(ProdutoBD.getProdutoByID(rset.getInt("produto_id"), false));
 					ic.setQuantidade(rset.getInt("quantidade"));
 					comp.add(ic);
-				}
 			}
 		} catch (SQLException exception) {
 			exception.printStackTrace();

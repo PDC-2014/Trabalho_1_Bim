@@ -1,42 +1,43 @@
 package dao;
 
-import java.sql.Connection;
+import static dao.Conexao.fecharConexao;
+import static dao.Conexao.getConnection;
+import static dao.FilialBD.recuperarFilial;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import model.Cliente;
 
-import static dao.Conexao.*;
+import model.Cliente;
 
 public class ClienteBD {
 
-	public static Cliente getClienteByID(Integer id) {
-		return getClienteByID(id, true);
-	}
-	
-	public static Cliente getClienteByID(Integer id, Boolean fechar) {
+	private static Cliente cliente;
+	private static String sql;
+	private static PreparedStatement preparedStatement;
 
-		Cliente cliente = null;
+	private static void initVars() {
+		cliente = null;
+		sql = null;
+		preparedStatement = null;
+	}
+
+	public static Cliente getClienteByCod(String cod) {
+		return getClienteByCod(cod, true);
+	}
+
+	public static Cliente getClienteByCod(String cod, Boolean fechar) {
+
+		initVars();
 
 		try {
-			String sql = "SELECT cod, nome, cpf, data_nascimento FROM cliente WHERE cod like ?";
+			sql = "SELECT cod, nome, cpf, data_nascimento FROM cliente WHERE cod = ?";
 
-			Connection con = getConnection();
-			PreparedStatement stmt = con.prepareStatement(sql);
+			preparedStatement = getConnection().prepareStatement(sql);
+			preparedStatement.setString(1, cod);
 
-			stmt.setString(1, "___" + id);
-
-			ResultSet rset = stmt.executeQuery();
-			if (rset.next()) {
-				cliente = new Cliente();
-				cliente.setId(Integer.parseInt(rset.getString("cod").substring(3)));
-				cliente.setFilial(FilialBD.recuperarFilial(rset.getString("cod").substring(0, 2)));
-				cliente.setNome(rset.getString("nome"));
-				cliente.setCpf(rset.getString("cpf"));
-				cliente.setDataNascimento(rset.getDate("data_nascimento"));
-			}
-
-		} catch (SQLException exception) {
+			ResultSet resultSet = preparedStatement.executeQuery();
+			cliente = construirCliente(resultSet);
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		} finally {
 			if (fechar)
@@ -46,31 +47,24 @@ public class ClienteBD {
 		return cliente;
 	}
 
-	public Cliente getClienteByNome(String nome) {
+	public static Cliente getClienteByNome(String nome) {
 		return getClienteByNome(nome, true);
 	}
-	
-	public Cliente getClienteByNome(String nome, Boolean fechar) {
 
-		Cliente cliente = null;
-		String sql = null;
+	public static Cliente getClienteByNome(String nome, Boolean fechar) {
+
+		initVars();
 
 		try {
-			sql = "SELECT id, nome, cpf, dataNasci, filial FROM cliente WHERE nome = ?";
+			sql = "SELECT cod, nome, cpf, data_nascimento FROM cliente WHERE nome = ?";
 
-			PreparedStatement stmt = getConnection().prepareStatement(sql);
-			stmt.setString(0, nome);
+			preparedStatement = getConnection().prepareStatement(sql);
+			preparedStatement.setString(1, nome);
 
-			ResultSet rset = stmt.executeQuery();
-			if (rset.next()) {
-				cliente = new Cliente();
-				cliente.setId(rset.getInt("id"));
-				cliente.setNome(rset.getString("nome"));
-				cliente.setCpf(rset.getString("cpf"));
-				cliente.setDataNascimento(rset.getDate("dataNascimento"));
-			}
+			ResultSet resultSet = preparedStatement.executeQuery();
+			cliente = construirCliente(resultSet);
 
-		} catch (SQLException exception) {
+		} catch (Exception exception) {
 			exception.printStackTrace();
 		} finally {
 			if (fechar)
@@ -80,30 +74,49 @@ public class ClienteBD {
 		return cliente;
 	}
 
-	public void novoCliente(Cliente cliente) {
+	public static void novoCliente(Cliente cliente) throws Exception {
 		novoCliente(cliente, true);
 	}
-	
-	public void novoCliente(Cliente cliente, Boolean fechar) {
 
-		String sql = null;
+	public static void novoCliente(Cliente cliente, Boolean fechar) throws Exception {
 
-		try {
-			sql = "INSERT INTO cliente (cod, nome, cpf, data_nascimento) VALUES (?, ?, ?, ?)";
+		initVars();
 
-			PreparedStatement stmt = getConnection().prepareStatement(sql);
+		sql = "INSERT INTO cliente (cod, nome, cpf, data_nascimento) VALUES (?, ?, ?, ?)";
 
-			stmt.setString(0, cliente.getFilial().getCodigo() + cliente.getId());
-			stmt.setString(1, cliente.getNome());
-			stmt.setString(2, cliente.getCpf());
-			stmt.setDate(3, new java.sql.Date(cliente.getDataNascimento().getTime()));
+		preparedStatement = getConnection().prepareStatement(sql);
 
-			stmt.executeQuery();
-		} catch (SQLException exception) {
-			exception.printStackTrace();
-		} finally {
-			if (fechar)
-				fecharConexao();
-		}
+		preparedStatement.setString(1, cliente.getCodigo());
+		preparedStatement.setString(2, cliente.getNome());
+		preparedStatement.setString(3, cliente.getCpf());
+		preparedStatement.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTime()));
+
+		preparedStatement.executeUpdate();
+
+		if (fechar)
+			fecharConexao();
+	}
+
+	private static Cliente construirCliente(ResultSet resultSet) throws Exception {
+
+		Cliente cliente = null;
+
+		if (resultSet.next())
+			cliente = montaCliente(resultSet);
+
+		return cliente;
+	}
+
+	private static Cliente montaCliente(ResultSet resultSet) throws Exception {
+
+		Cliente cliente = new Cliente();
+
+		cliente.setCodigo(resultSet.getString("cod"));
+		cliente.setFilial(recuperarFilial(resultSet.getString("cod").substring(0, 2)));
+		cliente.setNome(resultSet.getString("nome"));
+		cliente.setCpf(resultSet.getString("cpf"));
+		cliente.setDataNascimento(resultSet.getDate("data_nascimento"));
+
+		return cliente;
 	}
 }
