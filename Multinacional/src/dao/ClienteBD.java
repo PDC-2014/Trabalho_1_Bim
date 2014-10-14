@@ -6,6 +6,7 @@ import static dao.FilialBD.recuperarFilial;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 
 import model.Cliente;
 
@@ -81,12 +82,18 @@ public class ClienteBD {
 	public static void novoCliente(Cliente cliente, Boolean fechar) throws Exception {
 
 		initVars();
+		String codigoCliente;
 
 		sql = "INSERT INTO cliente (cod, nome, cpf, data_nascimento) VALUES (?, ?, ?, ?)";
 
 		preparedStatement = getConnection().prepareStatement(sql);
 
-		preparedStatement.setString(1, cliente.getCodigo());
+		if(cliente.getCodigo() == null || "".equals(cliente.getCodigo()))
+			codigoCliente = Conexao.filial.getCodigo() + new Date().getTime(); 
+		else
+			codigoCliente = cliente.getCodigo();
+		
+		preparedStatement.setString(1, codigoCliente);
 		preparedStatement.setString(2, cliente.getNome());
 		preparedStatement.setString(3, cliente.getCpf());
 		preparedStatement.setDate(4, new java.sql.Date(cliente.getDataNascimento().getTime()));
